@@ -29,3 +29,4 @@ func Unpack(s string) (string, error) {
 		}
 	}
 	return result, nil
+}
