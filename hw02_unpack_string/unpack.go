@@ -9,17 +9,25 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-func Unpack(s string) (string, error) {
+func Unpack(s string) (string, error){
 	var result string
 	for i, c := range s {
 		n, _ := strconv.Atoi(string(c))
 		switch {
-		case !(unicode.IsDigit(c)): // Если символ буква
+		// Если символ буква
+		case unicode.IsLetter(c) : 
 			result += string(c)
-		case i == 0 && unicode.IsDigit(c): // Первый символ цифра
+
+		// Если не буква и не цифра
+		case !unicode.IsLetter(c) && !unicode.IsDigit(c):
 			return ErrInvalidString.Error(), ErrInvalidString
-		case unicode.IsDigit(rune(s[i+1])): // Цифра часть числа
+		// Первый символ цифра
+		case i == 0 && unicode.IsDigit(c): 
 			return ErrInvalidString.Error(), ErrInvalidString
+		// Цифра часть числа
+		case unicode.IsDigit(rune(s[i+1])):
+			return ErrInvalidString.Error(), ErrInvalidString
+
 		default: // Если цифра
 			if n == 0 {
 				result = result[:len(result)-1]
