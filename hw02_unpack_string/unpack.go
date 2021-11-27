@@ -14,8 +14,10 @@ func Unpack(s string) (string, error) {
 	for i, c := range s {
 		n, _ := strconv.Atoi(string(c))
 		switch {
-		case !(unicode.IsDigit(c)): // Если символ буква
+		case unicode.IsLetter(c): // Если символ буква
 			result += string(c)
+		case !unicode.IsLetter(c) && !unicode.IsDigit(c):
+			return ErrInvalidString.Error(), ErrInvalidString
 		case i == 0 && unicode.IsDigit(c): // Первый символ цифра
 			return ErrInvalidString.Error(), ErrInvalidString
 		case unicode.IsDigit(rune(s[i+1])): // Цифра часть числа
