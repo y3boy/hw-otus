@@ -44,7 +44,7 @@ func TestUnpackInvalidString(t *testing.T) {
 	}
 }
 
-func TestByMe(t *testing.T){
+func TestByMe(t *testing.T) {
 	invalidStrings := []string{"a!3bc", "asdasd3da!", "aaa1)bfa#"}
 	for _, tc := range invalidStrings {
 		tc := tc
