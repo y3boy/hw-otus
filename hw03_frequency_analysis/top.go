@@ -28,10 +28,10 @@ func Top10(text string) []string {
 		maxKey := ""
 		for key, val := range cache {
 			if val > maxVal {
-				subSlice = make([]string, 0)
-				maxKeys = make([]string, 0)
 				maxVal = val
 				maxKey = key
+				subSlice = make([]string, 0)
+				maxKeys = make([]string, 0)
 				subSlice = append(subSlice, maxKey)
 				maxKeys = append(maxKeys, maxKey)
 			} else if val == maxVal {

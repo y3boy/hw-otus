@@ -48,6 +48,10 @@ func TestTop10(t *testing.T) {
 		require.Len(t, Top10(""), 0)
 	})
 
+	t.Run("верни пустую слайс, потому что тут меньше 10 слов", func(t *testing.T) {
+		require.Len(t, Top10(""), 0)
+	})
+
 	t.Run("positive test", func(t *testing.T) {
 		if taskWithAsteriskIsCompleted {
 			expected := []string{
