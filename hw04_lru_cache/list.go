@@ -1,5 +1,7 @@
 package hw04lrucache
 
+import "fmt"
+
 type List interface {
 	Len() int
 	Front() *ListItem
@@ -17,8 +19,65 @@ type ListItem struct {
 }
 
 type list struct {
-	List // Remove me after realization.
-	// Place your code here.
+	len  int
+	head *ListItem
+	tail *ListItem
+}
+
+func (l list) Len() int {
+	return l.len
+}
+
+func (l list) Front() *ListItem {
+	return l.head
+}
+
+func (l list) Back() *ListItem {
+	return l.tail
+}
+
+func (l list) PushFront(v interface{}) *ListItem {
+	NewItemList := &ListItem{
+		Value: v,
+		Next:  nil,
+		Prev:  nil,
+	}
+	if l.head == nil {
+		l.head = NewItemList
+		l.tail = NewItemList
+	} else {
+		NewItemList.Next = l.head
+		l.head.Prev = NewItemList
+		l.head = NewItemList
+	}
+	l.len++
+	return NewItemList
+}
+
+func (l list) PushBack(v interface{}) *ListItem {
+	NewItemList := &ListItem{
+		Value: v,
+		Next:  nil,
+		Prev:  nil,
+	}
+	if l.head == nil {
+		l.head = NewItemList
+		l.tail = NewItemList
+	} else {
+		l.tail.Next = NewItemList
+		NewItemList.Prev = l.tail
+		l.tail = NewItemList
+	}
+	l.len++
+	return NewItemList
+}
+
+func (l list) Remove() {
+	fmt.Print(0)
+}
+
+func (l list) MoveToFront() {
+	fmt.Print(0)
 }
 
 func NewList() List {

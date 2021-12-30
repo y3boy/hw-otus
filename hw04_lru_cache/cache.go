@@ -1,5 +1,7 @@
 package hw04lrucache
 
+// import "list.go"
+
 type Key string
 
 type Cache interface {
