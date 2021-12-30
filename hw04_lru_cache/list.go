@@ -24,19 +24,19 @@ type list struct {
 	tail *ListItem
 }
 
-func (l list) Len() int {
+func (l *list) Len() int {
 	return l.len
 }
 
-func (l list) Front() *ListItem {
+func (l *list) Front() *ListItem {
 	return l.head
 }
 
-func (l list) Back() *ListItem {
+func (l *list) Back() *ListItem {
 	return l.tail
 }
 
-func (l list) PushFront(v interface{}) *ListItem {
+func (l *list) PushFront(v interface{}) *ListItem {
 	NewItemList := &ListItem{
 		Value: v,
 		Next:  nil,
@@ -54,7 +54,7 @@ func (l list) PushFront(v interface{}) *ListItem {
 	return NewItemList
 }
 
-func (l list) PushBack(v interface{}) *ListItem {
+func (l *list) PushBack(v interface{}) *ListItem {
 	NewItemList := &ListItem{
 		Value: v,
 		Next:  nil,
@@ -72,11 +72,11 @@ func (l list) PushBack(v interface{}) *ListItem {
 	return NewItemList
 }
 
-func (l list) Remove() {
+func (l *list) Remove() {
 	fmt.Print(0)
 }
 
-func (l list) MoveToFront() {
+func (l *list) MoveToFront() {
 	fmt.Print(0)
 }
 
