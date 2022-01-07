@@ -1,6 +1,6 @@
 package hw04lrucache
 
-import "fmt"
+// import "fmt"
 
 type List interface {
 	Len() int
@@ -36,7 +36,7 @@ func (l list) Back() *ListItem {
 	return l.tail
 }
 
-func (l list) PushFront(v interface{}) *ListItem {
+func (l *list) PushFront(v interface{}) *ListItem {
 	NewItemList := &ListItem{
 		Value: v,
 		Next:  nil,
@@ -54,7 +54,7 @@ func (l list) PushFront(v interface{}) *ListItem {
 	return NewItemList
 }
 
-func (l list) PushBack(v interface{}) *ListItem {
+func (l *list) PushBack(v interface{}) *ListItem {
 	NewItemList := &ListItem{
 		Value: v,
 		Next:  nil,
@@ -72,12 +72,33 @@ func (l list) PushBack(v interface{}) *ListItem {
 	return NewItemList
 }
 
-func (l list) Remove(i *ListItem) {
-	fmt.Print(0)
+func (l list) Find(i *ListItem) (*ListItem, bool) {
+	found := false
+	var ForDelete *ListItem = nil
+	for n := l.Front(); n != nil && !found; n = n.Next{
+		if n.Value == i.Value {
+			found = true
+			ForDelete = n
+		}
+	}
+	return ForDelete, found
 }
 
-func (l list) MoveToFront(i *ListItem) {
-	fmt.Print(0)
+func (l *list) Remove(i *ListItem) {
+	if ForDelete, found := l.Find(i); found {
+		ForDelete.Prev.Next = ForDelete.Next
+		ForDelete.Next.Prev = ForDelete.Prev
+		l.len = l.len - 1
+	}
+}
+
+func (l *list) MoveToFront(i *ListItem) {
+	if ForDelete, found := l.Find(i); found {
+		ForDelete.Prev.Next = ForDelete.Next
+		ForDelete.Next.Prev = ForDelete.Prev
+		// ForDelete.Next = l.head
+		// l.head = ForDelete
+	}
 }
 
 func NewList() List {
