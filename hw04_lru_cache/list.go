@@ -93,11 +93,18 @@ func (l *list) Remove(i *ListItem) {
 }
 
 func (l *list) MoveToFront(i *ListItem) {
-	if ForDelete, found := l.Find(i); found {
-		ForDelete.Prev.Next = ForDelete.Next
-		ForDelete.Next.Prev = ForDelete.Prev
-		// ForDelete.Next = l.head
-		// l.head = ForDelete
+	if ForMove, found := l.Find(i); found {
+		if ForMove == l.tail {
+				ForMove.Prev.Next = nil
+				l.tail = ForMove.Prev	
+				ForMove.Next = l.head
+				l.head = ForMove
+		} else if ForMove != l.head { 
+			ForMove.Prev.Next = ForMove.Next
+			ForMove.Next.Prev = ForMove.Prev
+			ForMove.Next = l.head
+			l.head = ForMove
+		}
 	}
 }
 
