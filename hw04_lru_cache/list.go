@@ -1,7 +1,5 @@
 package hw04lrucache
 
-// import "fmt"
-
 type List interface {
 	Len() int
 	Front() *ListItem
@@ -10,6 +8,7 @@ type List interface {
 	PushBack(v interface{}) *ListItem
 	Remove(i *ListItem)
 	MoveToFront(i *ListItem)
+	ClearList() // For cleaning
 }
 
 type ListItem struct {
@@ -72,43 +71,59 @@ func (l *list) PushBack(v interface{}) *ListItem {
 	return NewItemList
 }
 
-func (l list) Find(i *ListItem) (*ListItem, bool) {
-	found := false
-	var ForDelete *ListItem = nil
-	for n := l.Front(); n != nil && !found; n = n.Next{
-		if n.Value == i.Value {
-			found = true
-			ForDelete = n
-		}
-	}
-	return ForDelete, found
-}
+// Создал эту функцию для себя
+// func (l list) Find(i *ListItem) (*ListItem, bool) {
+// 	found := false
+// 	var ForDelete *ListItem = nil
+// 	for n := l.Front(); n != nil && !found; n = n.Next{
+// 		if n.Value == i.Value {
+// 			found = true
+// 			ForDelete = n
+// 		}
+// 	}
+// 	return ForDelete, found
+// }
 
 func (l *list) Remove(i *ListItem) {
-	if ForDelete, found := l.Find(i); found {
+	// if ForDelete, found := l.Find(i); found {
+	ForDelete := i
+	if ForDelete == l.tail {
+		ForDelete.Prev.Next = nil
+		l.tail = ForDelete.Prev
+	} else if ForDelete == l.head {
+		ForDelete.Next.Prev = nil
+		l.head = ForDelete.Next
+	} else { 
 		ForDelete.Prev.Next = ForDelete.Next
 		ForDelete.Next.Prev = ForDelete.Prev
 		l.len = l.len - 1
 	}
+	// }
 }
 
 func (l *list) MoveToFront(i *ListItem) {
-	if ForMove, found := l.Find(i); found {
-		if ForMove == l.tail {
-				l.tail = ForMove.Prev
-				ForMove.Prev.Next = nil	
-				ForMove.Next = l.head
-				l.head = ForMove
-				if l.tail.Prev == nil { 
-					l.tail.Prev = l.head
-				}
-		} else if ForMove != l.head { 
-			ForMove.Prev.Next = ForMove.Next
-			ForMove.Next.Prev = ForMove.Prev
+	// if ForMove, found := l.Find(i); found {
+	ForMove := i 
+	if ForMove == l.tail {
+			l.tail = ForMove.Prev
+			ForMove.Prev.Next = nil	
 			ForMove.Next = l.head
 			l.head = ForMove
-		}
+			if l.tail.Prev == nil { 
+				l.tail.Prev = l.head
+			}
+	} else if ForMove != l.head { 
+		ForMove.Prev.Next = ForMove.Next
+		ForMove.Next.Prev = ForMove.Prev
+		ForMove.Next = l.head
+		l.head = ForMove
 	}
+	// }
+}
+
+func(l *list) ClearList(){
+	l.head = nil
+	l.tail = nil
 }
 
 func NewList() List {

@@ -71,7 +71,7 @@ func TestList(t *testing.T) {
 		require.Equal(t, 30, l.Front().Value)
 		require.Equal(t, 10, l.Back().Value)
 
-		l.MoveToFront(l.Back()) 
+		l.MoveToFront(l.Back()) // [10, 30]
 		require.Equal(t, 10, l.Front().Value)
 		require.Equal(t, 30, l.Back().Value)
 	})

@@ -1,7 +1,5 @@
 package hw04lrucache
 
-// import "list.go"
-
 type Key string
 
 type Cache interface {
@@ -11,16 +9,39 @@ type Cache interface {
 }
 
 type lruCache struct {
-	Cache // Remove me after realization.
-
 	capacity int
 	queue    List
 	items    map[Key]*ListItem
 }
 
-type cacheItem struct {
-	key   Key
-	value interface{}
+func (lru *lruCache) Set(key Key, value interface{}) bool {
+	item := ListItem{value, nil, nil}
+	if _, ok := lru.items[key]; ok {
+		lru.items[key] = &item
+		lru.queue.MoveToFront(&item)
+		return true
+	} else {
+		if len(lru.items) != lru.capacity {
+			lru.items[key] = &item 
+			lru.queue.PushFront(item)
+			lru.capacity++
+		} else {
+			lru.queue.Remove(&item)
+			lru.queue.PushFront(item)
+		}
+		return false	
+	}
+}
+
+func (lru *lruCache) Get(key Key) (interface {}, bool) {
+	_ = key
+	v := NewList()
+	return v, true
+}
+
+func (lru *lruCache) Clear(){
+	lru.queue.ClearList()
+	lru.items = make(map[Key]*ListItem, lru.capacity)
 }
 
 func NewCache(capacity int) Cache {
