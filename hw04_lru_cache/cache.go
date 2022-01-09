@@ -34,9 +34,12 @@ func (lru *lruCache) Set(key Key, value interface{}) bool {
 }
 
 func (lru *lruCache) Get(key Key) (interface {}, bool) {
-	_ = key
-	v := NewList()
-	return v, true
+	if item, ok := lru.items[key]; ok {
+		lru.queue.MoveToFront(item)
+		return item, ok
+	} else {
+		return nil, ok
+	}
 }
 
 func (lru *lruCache) Clear(){
