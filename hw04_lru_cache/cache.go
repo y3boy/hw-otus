@@ -15,35 +15,33 @@ type lruCache struct {
 }
 
 func (lru *lruCache) Set(key Key, value interface{}) bool {
-	item := ListItem{value, nil, nil}
-	if _, ok := lru.items[key]; ok {
-		lru.items[key] = &item
-		lru.queue.MoveToFront(&item)
+	// item := ListItem{value, nil, nil}
+	if item, ok := lru.items[key]; ok {
+		lru.items[key] = item
+		lru.queue.MoveToFront(item)
 		return true
+	} else if len(lru.items) != lru.capacity {
+		lru.items[key] = item
+		lru.queue.PushFront(item)
+		lru.capacity++
+		return false
 	} else {
-		if len(lru.items) != lru.capacity {
-			lru.items[key] = &item 
-			lru.queue.PushFront(item)
-			lru.capacity++
-		} else {
-			lru.queue.Remove(&item)
-			lru.queue.PushFront(item)
-		}
-		return false	
+		lru.queue.Remove(item)
+		lru.queue.PushFront(item)
+		return false
 	}
 }
 
-func (lru *lruCache) Get(key Key) (interface {}, bool,) {
+func (lru *lruCache) Get(key Key) (interface{}, bool) {
 	if item, ok := lru.items[key]; ok {
 		item := item
 		lru.queue.MoveToFront(item)
 		return item.Value, ok
-	} else {
-		return nil, ok
 	}
+	return nil, false
 }
 
-func (lru *lruCache) Clear(){
+func (lru *lruCache) Clear() {
 	lru.queue.ClearList()
 	lru.items = make(map[Key]*ListItem, lru.capacity)
 }
