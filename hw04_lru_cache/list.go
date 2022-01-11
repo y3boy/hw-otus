@@ -74,55 +74,36 @@ func (l *list) PushBack(v interface{}) *ListItem {
 // Создал эту функцию для себя
 // func (l list) Find(i *ListItem) (*ListItem, bool) {
 // 	found := false
-// 	var ForDelete *ListItem = nil
+// 	var i *ListItem = nil
 // 	for n := l.Front(); n != nil && !found; n = n.Next{
 // 		if n.Value == i.Value {
 // 			found = true
-// 			ForDelete = n
+// 			i = n
 // 		}
 // 	}
-// 	return ForDelete, found
+// 	return i, found
 // }
 
 func (l *list) Remove(i *ListItem) {
-	// if ForDelete, found := l.Find(i); found {
-	ForDelete := i
-	switch ForDelete {
+	switch i {
 	case l.tail:
-		ForDelete.Prev.Next = nil
-		l.tail = ForDelete.Prev
+		l.tail = i.Prev
+		l.tail.Next = nil
+		i.Prev.Next = nil
+		i.Prev = nil
 	case l.head:
-		ForDelete.Next.Prev = nil
-		l.head = ForDelete.Next
+		l.head = i.Next
+		i.Next.Prev = nil
 	default:
-		ForDelete.Prev.Next = ForDelete.Next
-		ForDelete.Next.Prev = ForDelete.Prev
+		i.Prev.Next = i.Next
+		i.Next.Prev = i.Prev
 		l.len--
 	}
-	// }
 }
 
 func (l *list) MoveToFront(i *ListItem) {
-	// if ForMove, found := l.Find(i); found {
-	ForMove := i
-	switch ForMove {
-	case l.tail:
-		l.tail = ForMove.Prev
-		ForMove.Prev.Next = nil
-		ForMove.Next = l.head
-		l.head = ForMove
-		if l.tail.Prev == nil {
-			l.tail.Prev = l.head
-		}
-	case l.head:
-		break
-	default:
-		ForMove.Prev.Next = ForMove.Next
-		ForMove.Next.Prev = ForMove.Prev
-		ForMove.Next = l.head
-		l.head = ForMove
-	}
-	// }
+	l.Remove(i)
+	l.PushFront(i.Value)
 }
 
 func (l *list) ClearList() {

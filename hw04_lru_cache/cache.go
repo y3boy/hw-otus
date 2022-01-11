@@ -15,13 +15,18 @@ type lruCache struct {
 }
 
 func (lru *lruCache) Set(key Key, value interface{}) bool {
+	ItemForSet := &ListItem{value, nil, nil}
+	item, ok := lru.items[key]
+	if ok {
+		item.Value = value
+		lru.queue.MoveToFront(item)
+		return true
+	}
+	
+	lru.items[key] = ItemForSet
 	switch len(lru.items) {
 	case lru.capacity:
-		if item, ok := lru.items[key]; ok {
-			lru.queue.MoveToFront(item)
-			return true
-		}
-		lru.queue.Remove(lru.items[key])
+		lru.queue.Remove(lru.queue.Back())
 		lru.queue.PushFront(lru.items[key])
 		return false
 	default:
@@ -34,7 +39,7 @@ func (lru *lruCache) Set(key Key, value interface{}) bool {
 func (lru *lruCache) Get(key Key) (interface{}, bool) {
 	if item, ok := lru.items[key]; ok {
 		item := item
-		lru.queue.MoveToFront(item)
+		// lru.queue.MoveToFront(item)
 		return item.Value, ok
 	}
 	return nil, false
