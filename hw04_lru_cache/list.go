@@ -87,32 +87,36 @@ func (l *list) PushBack(v interface{}) *ListItem {
 func (l *list) Remove(i *ListItem) {
 	// if ForDelete, found := l.Find(i); found {
 	ForDelete := i
-	if ForDelete == l.tail {
+	switch ForDelete {
+	case l.tail:
 		ForDelete.Prev.Next = nil
 		l.tail = ForDelete.Prev
-	} else if ForDelete == l.head {
+	case l.head:
 		ForDelete.Next.Prev = nil
 		l.head = ForDelete.Next
-	} else { 
+	default:
 		ForDelete.Prev.Next = ForDelete.Next
 		ForDelete.Next.Prev = ForDelete.Prev
-		l.len = l.len - 1
+		l.len--
 	}
 	// }
 }
 
 func (l *list) MoveToFront(i *ListItem) {
 	// if ForMove, found := l.Find(i); found {
-	ForMove := i 
-	if ForMove == l.tail {
-			l.tail = ForMove.Prev
-			ForMove.Prev.Next = nil	
-			ForMove.Next = l.head
-			l.head = ForMove
-			if l.tail.Prev == nil { 
-				l.tail.Prev = l.head
-			}
-	} else if ForMove != l.head { 
+	ForMove := i
+	switch ForMove {
+	case l.tail:
+		l.tail = ForMove.Prev
+		ForMove.Prev.Next = nil
+		ForMove.Next = l.head
+		l.head = ForMove
+		if l.tail.Prev == nil {
+			l.tail.Prev = l.head
+		}
+	case l.head:
+		break
+	default:
 		ForMove.Prev.Next = ForMove.Next
 		ForMove.Next.Prev = ForMove.Prev
 		ForMove.Next = l.head
@@ -121,7 +125,7 @@ func (l *list) MoveToFront(i *ListItem) {
 	// }
 }
 
-func(l *list) ClearList(){
+func (l *list) ClearList() {
 	l.head = nil
 	l.tail = nil
 }
