@@ -39,7 +39,7 @@ func (lru *lruCache) Set(key Key, value interface{}) bool {
 func (lru *lruCache) Get(key Key) (interface{}, bool) {
 	if item, ok := lru.items[key]; ok {
 		item := item
-		// lru.queue.MoveToFront(item)
+		lru.queue.MoveToFront(item)
 		return item.Value, ok
 	}
 	return nil, false
