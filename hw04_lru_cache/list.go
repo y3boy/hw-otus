@@ -71,19 +71,6 @@ func (l *list) PushBack(v interface{}) *ListItem {
 	return NewItemList
 }
 
-// Создал эту функцию для себя
-// func (l list) Find(i *ListItem) (*ListItem, bool) {
-// 	found := false
-// 	var i *ListItem = nil
-// 	for n := l.Front(); n != nil && !found; n = n.Next{
-// 		if n.Value == i.Value {
-// 			found = true
-// 			i = n
-// 		}
-// 	}
-// 	return i, found
-// }
-
 func (l *list) Remove(i *ListItem) {
 	switch i {
 	case l.tail:
@@ -113,4 +100,4 @@ func (l *list) ClearList() {
 
 func NewList() List {
 	return new(list)
-}
+} 
