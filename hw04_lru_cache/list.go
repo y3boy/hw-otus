@@ -100,4 +100,4 @@ func (l *list) ClearList() {
 
 func NewList() List {
 	return new(list)
-} 
+}

@@ -22,7 +22,7 @@ func (lru *lruCache) Set(key Key, value interface{}) bool {
 		lru.queue.MoveToFront(item)
 		return true
 	}
-	
+
 	lru.items[key] = ItemForSet
 	switch len(lru.items) {
 	case lru.capacity:
@@ -56,4 +56,4 @@ func NewCache(capacity int) Cache {
 		queue:    NewList(),
 		items:    make(map[Key]*ListItem, capacity),
 	}
-} 
+}
