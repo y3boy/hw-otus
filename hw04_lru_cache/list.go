@@ -114,6 +114,7 @@ func (l *list) MoveToFront(i *ListItem) {
 func (l *list) ClearList() {
 	l.head = nil
 	l.tail = nil
+	l.len = 0
 }
 
 func NewList() List {
