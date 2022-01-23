@@ -68,8 +68,7 @@ func TestRun(t *testing.T) {
 	})
 
 	t.Run("MyOwnTest", func(t *testing.T) {
-		tasksCount := 10
-		tasks := make([]Task, 0, tasksCount)
+		tasks := make([]Task, 0)
 
 		workersCount := 0
 		maxErrorsCount := 1
