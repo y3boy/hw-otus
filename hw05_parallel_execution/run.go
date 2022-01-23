@@ -38,7 +38,7 @@ func Run(tasks []Task, n, m int) error {
 	counter := Counter{}
 
 	for _, task := range tasks {
-		if counter.val == m {
+		if counter.GetVal() >= m {
 			return ErrErrorsLimitExceeded
 		}
 		wg.Add(1)
