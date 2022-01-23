@@ -9,16 +9,48 @@ var ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
 
 type Task func() error
 
+type Counter struct {
+	sync.RWMutex 
+	val int
+}
+
+func (counter *Counter) Increment(){
+	counter.Lock()
+	counter.val++
+	counter.Unlock()
+}
+
+func (counter *Counter) GetVal() int{
+	counter.RLock()
+	val := counter.val
+	counter.RUnlock()
+	return val
+}
+
 // Run starts tasks in n goroutines and stops its work when receiving m errors from tasks.
 func Run(tasks []Task, n, m int) error {
 	var wg sync.WaitGroup
-	for i:=0; i < len(tasks); i ++{
+	defer wg.Wait()
+	
+	workers := make(chan struct{}, n)
+	defer close(workers)
+
+	counter := Counter{}
+
+	for _, task := range(tasks){
+		if counter.val == m {
+			return ErrErrorsLimitExceeded
+		}
 		wg.Add(1)
-		go func(){
+		workers <- struct{}{}
+		go func(task Task, counter *Counter, wg *sync.WaitGroup){
 			defer wg.Done()
-			tasks[i-1]();
-		}()
+			err := task()
+			if err != nil {
+				counter.Increment()
+			}
+			<-workers
+		}(task, &counter, &wg)
 	}
-	wg.Wait()
 	return nil
 }
