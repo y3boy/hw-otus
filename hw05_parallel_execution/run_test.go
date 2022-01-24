@@ -14,7 +14,6 @@ import (
 
 func TestRun(t *testing.T) {
 	defer goleak.VerifyNone(t)
-
 	t.Run("if were errors in first M tasks, than finished not more N+M tasks", func(t *testing.T) {
 		tasksCount := 50
 		tasks := make([]Task, 0, tasksCount)
@@ -66,5 +65,14 @@ func TestRun(t *testing.T) {
 
 		require.Equal(t, runTasksCount, int32(tasksCount), "not all tasks were completed")
 		require.LessOrEqual(t, int64(elapsedTime), int64(sumTime/2), "tasks were run sequentially?")
+	})
+
+	t.Run("MyOwnTest", func(t *testing.T) {
+		tasks := make([]Task, 0)
+
+		workersCount := 0
+		maxErrorsCount := 1
+		err := Run(tasks, workersCount, maxErrorsCount)
+		require.Equal(t, err, nil)
 	})
 }
