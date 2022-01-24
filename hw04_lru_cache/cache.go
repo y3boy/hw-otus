@@ -14,31 +14,39 @@ type lruCache struct {
 	items    map[Key]*ListItem
 }
 
-func (lru *lruCache) Set(key Key, value interface{}) bool {
-	item, ok := lru.items[key]
-	if ok {
-		item.Value = value
-		lru.queue.Remove(item)
-		item = lru.queue.PushFront(item.Value)
-		lru.items[key] = item
-		return true
-	}
+// func (lru *lruCache) Set(key Key, value interface{}) bool {
+// 	item, ok := lru.items[key]
+// 	if ok {
+// 		item.Value = value
+// 		return true
+// 	}
 
-	if len(lru.items) == lru.capacity {
+// 	if len(lru.items) == lru.capacity {
+// 		lru.queue.Remove(lru.queue.Back())
+// 	}
+// 	ItemForSet := lru.queue.PushFront(value)
+// 	lru.items[key] = ItemForSet
+// 	lru.capacity++
+// 	return false
+// }
+
+func (lru *lruCache) Set(key Key, value interface{}) bool {
+	if item, ok := lru.items[key]; ok {
+		lru.queue.MoveToFront(item)
+		item.Value = value
+		return true
+	} else if len(lru.items) == lru.capacity {
 		lru.queue.Remove(lru.queue.Back())
 	}
-	ItemForSet := lru.queue.PushFront(value)
-	lru.items[key] = ItemForSet
-	lru.capacity++
+	lru.queue.PushFront(value)
+	lru.items[key] = lru.queue.Front()
 	return false
 }
 
 func (lru *lruCache) Get(key Key) (interface{}, bool) {
 	item, ok := lru.items[key]
 	if ok {
-		lru.queue.Remove(item)
-		item = lru.queue.PushFront(item.Value)
-		lru.items[key] = item
+		lru.queue.MoveToFront(item)
 		return lru.items[key].Value, ok
 	}
 	return nil, false

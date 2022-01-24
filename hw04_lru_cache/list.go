@@ -92,13 +92,29 @@ func (l *list) Remove(i *ListItem) {
 }
 
 func (l *list) MoveToFront(i *ListItem) {
-	l.Remove(i)
-	l.PushFront(i.Value)
+	switch i {
+	case l.tail:
+		l.tail = i.Prev
+		l.tail.Next = nil
+		i.Prev = nil
+		i.Next = l.head
+		l.head.Prev = i
+		l.head = i
+	case l.head:
+		break
+	default:
+		i.Next.Prev = i.Prev
+		i.Prev.Next = i.Next
+		i.Prev = nil
+		i.Next = l.head
+		l.head = i
+	}
 }
 
 func (l *list) ClearList() {
 	l.head = nil
 	l.tail = nil
+	l.len = 0
 }
 
 func NewList() List {

@@ -11,9 +11,7 @@ import (
 
 func TestCache(t *testing.T) {
 	t.Run("empty cache", func(t *testing.T) {
-		t.Skip()
 		c := NewCache(10)
-		_ = c
 
 		_, ok := c.Get("aaa")
 		require.False(t, ok)
@@ -52,7 +50,7 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("MyOwnTest", func(t *testing.T) {
-		t.Skip()
+		// t.Skip()
 		c := NewCache(5)
 
 		wasInCache := c.Set("aaa", 100)
@@ -61,11 +59,15 @@ func TestCache(t *testing.T) {
 		wasInCache = c.Set("bbb", 200)
 		require.False(t, wasInCache)
 
-		wasInCache = c.Set("aaa", 400)
-		require.True(t, wasInCache)
+		_, ok := c.Get("aaa")
+		require.True(t, ok)
 
 		c.Clear()
-		require.Equal(t, wasInCache, nil)
+		_, ok = c.Get("aaa")
+		require.False(t, ok)
+
+		_, ok = c.Get("bbb")
+		require.False(t, ok)
 	})
 }
 
