@@ -30,19 +30,19 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		return ErrUnsupportedFile
 	}
 	
-	source, err := os.Open(fromPath)
+	source, err := os.OpenFile(fromPath, os.O_RDWR, 0755)
 	defer source.Close()
 	if err != nil {
 		return ErrUnsupportedFile
 	}
 
-	fileToWrite, _ := os.Create(toPath)
+	fileToWrite, _ := os.OpenFile(toPath, os.O_RDWR|os.O_CREATE, 0755)
 	defer fileToWrite.Close()
 	if limit == 0 {
 			io.Copy(fileToWrite, source)
-	} 
-	io.CopyN(fileToWrite, source, limit)
-	
+	} else {
+		io.CopyN(fileToWrite, source, limit)
+	}
 	
 	return nil
 }
