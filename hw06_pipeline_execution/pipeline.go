@@ -15,7 +15,7 @@ func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	}
 	return out
 }
-
+// ...
 func wrapWithDone(in In, done In) Out {
 	out := make(Bi)
 
