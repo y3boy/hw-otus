@@ -23,7 +23,7 @@ func GetFileSize(fromPath string) (int64, error) {
 
 // Copy function.
 func Copy(fromPath, toPath string, offset, limit int64) error {
-	if fileSize, err := GetFileSize(fromPath); offset > fileSize || limit > fileSize || offset < 0 || limit < 0 {
+	if fileSize, err := GetFileSize(fromPath); offset > fileSize || offset < 0 || limit < 0 {
 		return ErrOffsetExceedsFileSize
 	} else if err != nil {
 		return ErrUnsupportedFile
