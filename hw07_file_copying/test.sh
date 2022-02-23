@@ -12,7 +12,7 @@ cmp out.txt testdata/out_offset0_limit10.txt
 ./go-cp -from testdata/input.txt -to out.txt -limit 1000
 cmp out.txt testdata/out_offset0_limit1000.txt
 
-./go-cp -from testdata/input.txt -to out.txt -limit 10000
+./go-cp -from testdata/input.txt -to out.txt -limit 100000
 cmp out.txt testdata/out_offset0_limit10000.txt
 
 ./go-cp -from testdata/input.txt -to out.txt -offset 100 -limit 1000
